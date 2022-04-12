@@ -44,7 +44,7 @@ public class TestPattern {
     
     @Test
     public void testParentesis() {
-        var patron = Calculadora.PATRON_PARENTESIS;
+        var patron = Calculadora.PATRON_PAR_SIMPLE;
         
         var matcher = patron.matcher("(1.3+2*)");
         matcher.matches();

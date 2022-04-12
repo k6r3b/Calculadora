@@ -25,44 +25,72 @@ public class Calculadora {
     }
 
     // Patron para comprobar que sean numeros
-    private static final String STR_REG_NUMERO = "[0-9]+(\\.[0-9]+)?";
+    private static final String STR_REG_NUMERO = "([0-9]+(\\.[0-9]+)?)";
     public static final Pattern PATRON_NUMERO = Pattern.compile(STR_REG_NUMERO);
 
     //Patron para buscar comprobar operaciones sin parentesis
     private static final String STR_REG_SIGNO = "[+\\-*^%]";
-    public static final Pattern PATRON_SIGNOS = Pattern.compile(STR_REG_SIGNO);
+    public static final Pattern PATRON_SIGNO = Pattern.compile(STR_REG_SIGNO);
 
     // Patron de operacion basica de 2 operandos
     private static final String STR_REG_OP_SIMPLE = STR_REG_NUMERO + STR_REG_SIGNO + STR_REG_NUMERO;
     public static final Pattern PATRON_OP_SIMPLE = Pattern.compile(STR_REG_OP_SIMPLE);
 
     // Patron de operacion basica de 3+ operandos
-    private static final String STR_REG_OP_MULTIPLE = STR_REG_OP_SIMPLE + "(" + STR_REG_SIGNO + STR_REG_NUMERO + ")+";
+    private static final String STR_REG_OP_MULTIPLE = "(" + STR_REG_OP_SIMPLE + "(" + STR_REG_SIGNO + STR_REG_NUMERO + ")+)";
     public static final Pattern PATRON_OP_MULTIPLE = Pattern.compile(STR_REG_OP_MULTIPLE);
-    
+
     // Patron dque confirma una operacion de 2+ operandos
-    private static final String STR_REG_OP_CUALQUIER = STR_REG_OP_SIMPLE + "|" + STR_REG_OP_MULTIPLE;
+    private static final String STR_REG_OP_CUALQUIER = "(" + STR_REG_OP_SIMPLE + "|" + STR_REG_OP_MULTIPLE + ")";
     public static final Pattern PATRON_OP_CUALQUIER = Pattern.compile(STR_REG_OP_CUALQUIER);
 
     // Patron para buscar multiples operaciones dentro de parentesis
-    private static final String STR_REG_PARENTESIS = "\\(" + STR_REG_OP_CUALQUIER + "\\)";
-    public static final Pattern PATRON_PARENTESIS = Pattern.compile(STR_REG_PARENTESIS);
+    private static final String STR_REG_PAR_SIMPLE = "(\\(" + STR_REG_OP_CUALQUIER + "\\))";
+    public static final Pattern PATRON_PAR_SIMPLE = Pattern.compile(STR_REG_PAR_SIMPLE);
+
+    // Patron para buscar operaciones cualesquiera, con parentesis o sin ellos
+    private static final String STR_REG_PAR_COMP = "\\(" + PATRON_OP_CUALQUIER + "*"+ STR_REG_PAR_SIMPLE + "*" + "\\)";
+    public static final Pattern PATRON_PAR_COMP = Pattern.compile(STR_REG_PAR_COMP);
 
     /**
      * Analiza la operacion introducida, dividiendola en operaciones mas
      * sencillas y resolviendolas con el metodo parsearCalculo()
      *
-     * @param calculo
+     * @param operacion
      * @return
+     * @throws exceptions.MalFormatoOperacion
      */
-    public static double parsearString(String calculo) {
-//        throw new Exception("Metodo aun sin implementar");
+    public static double parsearString(String operacion) throws MalFormatoOperacion {
+        if (!operacion.matches(STR_REG_OP_CUALQUIER)) {
+            throw new MalFormatoOperacion("El String '" + operacion + "' no tiene el formato: " + STR_REG_OP_CUALQUIER);
+        }
+
         double ret = 0;
-        var matcherPar = PATRON_PARENTESIS.matcher(calculo);
+
+        var matcherPar = PATRON_PAR_SIMPLE.matcher(operacion);
 
 //        while (false) {
 //            
 //        }
+        return ret;
+    }
+
+    /**
+     * Parsea operaciones de 3+ operandos y devuelve el resultado
+     *
+     * @param operacion
+     * @return
+     * @throws MalFormatoOperacion
+     */
+    public static double parsearOperacionCompuesta(String operacion) throws MalFormatoOperacion {
+
+        if (!operacion.matches(STR_REG_OP_CUALQUIER)) {
+            throw new MalFormatoOperacion("El String '" + operacion + "' no tiene el formato: " + STR_REG_OP_CUALQUIER);
+        }
+        double ret = 0;
+
+        var matcherPar = PATRON_PAR_SIMPLE.matcher(operacion);
+
         return ret;
     }
 
@@ -77,11 +105,11 @@ public class Calculadora {
     public static double parsearCalculo(String operacion) throws MalFormatoOperacion {
         double ret = 0;
 
-        Matcher matcher = PATRON_SIGNOS.matcher(operacion);
+        Matcher matcher = PATRON_SIGNO.matcher(operacion);
 
         // Si el String no coincide lanza un error
         if (!operacion.matches(STR_REG_OP_SIMPLE)) {
-            throw new MalFormatoOperacion("El String '" + operacion + "' no tiene el formato apropiado");
+            throw new MalFormatoOperacion("El String '" + operacion + "' no tiene el formato: " + STR_REG_OP_SIMPLE);
         }
 
         String[] operandos = operacion.split(STR_REG_SIGNO);
