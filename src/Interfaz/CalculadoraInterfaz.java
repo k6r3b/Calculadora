@@ -71,6 +71,7 @@ public class CalculadoraInterfaz extends javax.swing.JFrame {
             }
         });
 
+        resultado.setEditable(false);
         resultado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 resultadoActionPerformed(evt);
@@ -201,7 +202,6 @@ public class CalculadoraInterfaz extends javax.swing.JFrame {
                     .addComponent(boton4, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(boton7, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(boton1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -245,7 +245,7 @@ public class CalculadoraInterfaz extends javax.swing.JFrame {
                         .addComponent(botonRetroceso, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(botonBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(resultado, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -303,79 +303,81 @@ public class CalculadoraInterfaz extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void resultadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resultadoActionPerformed
-        
+
     }//GEN-LAST:event_resultadoActionPerformed
 
     private void boton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton7ActionPerformed
-        resultado.setText(resultado.getText()+7);
+        resultado.setText(resultado.getText() + 7);
     }//GEN-LAST:event_boton7ActionPerformed
 
     private void botonRetrocesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRetrocesoActionPerformed
-        resultado.setText(resultado.getText().substring(0, resultado.getText().length()-1));
+        int length = (int) Math.max(resultado.getText().length(), 0);
+        String texto = resultado.getText();
+        resultado.setText(texto.substring(0, length));
     }//GEN-LAST:event_botonRetrocesoActionPerformed
 
     private void boton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton0ActionPerformed
-        resultado.setText(resultado.getText()+0);
+        resultado.setText(resultado.getText() + 0);
     }//GEN-LAST:event_boton0ActionPerformed
 
     private void botonPuntoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPuntoActionPerformed
-        resultado.setText(resultado.getText()+".");
+        resultado.setText(resultado.getText() + ".");
     }//GEN-LAST:event_botonPuntoActionPerformed
 
     private void boton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton2ActionPerformed
-        resultado.setText(resultado.getText()+2);
+        resultado.setText(resultado.getText() + 2);
     }//GEN-LAST:event_boton2ActionPerformed
 
     private void boton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton1ActionPerformed
-        resultado.setText(resultado.getText()+1);
+        resultado.setText(resultado.getText() + 1);
     }//GEN-LAST:event_boton1ActionPerformed
 
     private void boton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton3ActionPerformed
-        resultado.setText(resultado.getText()+3);
+        resultado.setText(resultado.getText() + 3);
     }//GEN-LAST:event_boton3ActionPerformed
 
     private void boton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton4ActionPerformed
-        resultado.setText(resultado.getText()+4);
+        resultado.setText(resultado.getText() + 4);
     }//GEN-LAST:event_boton4ActionPerformed
 
     private void boton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton5ActionPerformed
-        resultado.setText(resultado.getText()+5);
+        resultado.setText(resultado.getText() + 5);
     }//GEN-LAST:event_boton5ActionPerformed
 
     private void boton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton6ActionPerformed
-        resultado.setText(resultado.getText()+6);
+        resultado.setText(resultado.getText() + 6);
     }//GEN-LAST:event_boton6ActionPerformed
 
     private void boton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton8ActionPerformed
-        resultado.setText(resultado.getText()+8);
+        resultado.setText(resultado.getText() + 8);
     }//GEN-LAST:event_boton8ActionPerformed
 
     private void boton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton9ActionPerformed
-        resultado.setText(resultado.getText()+9);
+        resultado.setText(resultado.getText() + 9);
     }//GEN-LAST:event_boton9ActionPerformed
 
     private void botonMasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMasActionPerformed
-        resultado.setText(resultado.getText()+"+");
+        resultado.setText(resultado.getText() + "+");
     }//GEN-LAST:event_botonMasActionPerformed
 
     private void botonMenosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMenosActionPerformed
-        resultado.setText(resultado.getText()+"-");
+        resultado.setText(resultado.getText() + "-");
     }//GEN-LAST:event_botonMenosActionPerformed
 
     private void botonPorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPorActionPerformed
-        resultado.setText(resultado.getText()+"*");
+        resultado.setText(resultado.getText() + "*");
     }//GEN-LAST:event_botonPorActionPerformed
 
     private void botonEntreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEntreActionPerformed
-        resultado.setText(resultado.getText()+"/");
+        resultado.setText(resultado.getText() + "/");
     }//GEN-LAST:event_botonEntreActionPerformed
 
     private void botonRestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRestoActionPerformed
-        resultado.setText(resultado.getText()+"%");
+        resultado.setText(resultado.getText() + "%");
     }//GEN-LAST:event_botonRestoActionPerformed
 
     private void botonElevarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonElevarActionPerformed
-        resultado.setText(resultado.getText()+"^");
+        resultado.setText(resultado.getText() + "^");
     }//GEN-LAST:event_botonElevarActionPerformed
 
     private void botonBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBorrarActionPerformed
