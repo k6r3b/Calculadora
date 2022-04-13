@@ -18,6 +18,8 @@ public class Calculadora {
 
     public static void main(String[] args) {
         try {
+            System.out.println(parsearString("3"));
+            System.out.println(parsearString("((3))"));
             System.out.println(parsearString("3*10"));
             System.out.println(parsearString("3+10"));
             System.out.println(parsearString("3-10"));
@@ -34,7 +36,7 @@ public class Calculadora {
     private static final String STR_REG_NUMERO = "(\\-?[0-9]+(\\.[0-9]+)?)";
     public static final Pattern PATRON_NUMERO = Pattern.compile(STR_REG_NUMERO);
 
-    //Patron para buscar comprobar operaciones sin parentesis
+    // Patron para buscar comprobar operaciones sin parentesis
     private static final String STR_REG_SIGNO = "([+/\\-*^%])";
     public static final Pattern PATRON_SIGNO = Pattern.compile(STR_REG_SIGNO);
 
@@ -83,10 +85,10 @@ public class Calculadora {
     public static double parsearString(String operacion) throws MalFormatoOperacion {
         double ret = 0;
         String strRet = operacion;
-        var matcherPar = PATRON_PAR_SIMPLE.matcher(strRet);
-        var matcherMP = Pattern.compile(STR_REG_NUMERO + "\\)\\(|[0-9]\\(|\\)[0-9]").matcher(strRet);
+        Matcher matcherPar;
+        Matcher matcherMP = Pattern.compile(STR_REG_NUMERO + "\\)\\(|[0-9]\\(|\\)[0-9]").matcher(strRet);
 
-        //Incluir multiplicacion al lado de parentesis izq
+        //Incluir multiplicacion al lado de parentesis
         while (matcherMP.find()) {
             var sb = new StringBuilder(strRet);
             int ind1 = matcherMP.start();
@@ -95,15 +97,21 @@ public class Calculadora {
             matcherMP.reset(strRet);
         }
 
-//        System.out.println(strRet);
+        strRet = quitarNumPar(strRet);
+        matcherPar = PATRON_PAR_SIMPLE.matcher(strRet);
+        
         //Parsear operaciones
         while (matcherPar.find()) {
-            var sb = new StringBuilder(strRet);
+            StringBuilder sb;
             int ind1 = matcherPar.start(), ind2 = matcherPar.end();
             String nuevo = parsearOperacionCompuesta(strRet.substring(ind1 + 1, ind2 - 1));
-
+            
+            sb = new StringBuilder(strRet);
             sb.replace(ind1, ind2, nuevo);
+            
             strRet = sb.toString();
+            strRet = quitarNumPar(strRet);
+            
             matcherPar.reset(strRet);
         }
 
@@ -113,6 +121,22 @@ public class Calculadora {
             ret = Double.parseDouble(strRet);
         } catch (NumberFormatException nfe) {
             throw new MalFormatoOperacion("La operacion introducida(" + strRet + ") presenta un formato, o caracteres erroneos");
+        }
+
+        return ret;
+    }
+
+    private static String quitarNumPar(String texto) {
+        String ret = texto;
+        Matcher matcher = Pattern.compile("\\(" + STR_REG_NUMERO + "\\)").matcher(ret);
+
+        while (matcher.find()) {
+            int ind1 = matcher.start(), ind2 = matcher.end();
+            var sb = new StringBuilder(ret);
+            sb.replace(ind1, ind2, ret.substring(ind1 + 1, ind2 - 1));
+
+            ret = sb.toString();
+            matcher.reset(ret);
         }
 
         return ret;
@@ -141,9 +165,9 @@ public class Calculadora {
     }
 
     /**
-     * Recibe un patrón de una operacion de 2 digitos y una cadena de 
-     * una operacion de 2+ digitos, busca todas las coincidencias del patrón 
-     * en la cadena y las sustituye por su resultado.
+     * Recibe un patrón de una operacion de 2 digitos y una cadena de una
+     * operacion de 2+ digitos, busca todas las coincidencias del patrón en la
+     * cadena y las sustituye por su resultado.
      *
      * @param patron
      * @param operacion
