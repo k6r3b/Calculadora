@@ -23,6 +23,8 @@ public class Calculadora {
             System.out.println(parsearString("3-10"));
             System.out.println(parsearString("((3.1*10)3)/2"));
             System.out.println(parsearString("3.1/10"));
+            System.out.println(parsearString("-3^3"));
+            System.out.println(parsearString("10%3"));
         } catch (MalFormatoOperacion ex) {
             Logger.getLogger(Calculadora.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -79,43 +81,39 @@ public class Calculadora {
      * @throws exceptions.MalFormatoOperacion
      */
     public static double parsearString(String operacion) throws MalFormatoOperacion {
-        double ret;
+        double ret = 0;
         String strRet = operacion;
         var matcherPar = PATRON_PAR_SIMPLE.matcher(strRet);
-        var matcherLP = Pattern.compile(STR_REG_NUMERO + "\\(|\\)\\(").matcher(strRet);
-        var matcherRP = Pattern.compile("\\)" + STR_REG_NUMERO).matcher(strRet);
+        var matcherMP = Pattern.compile(STR_REG_NUMERO + "\\)\\(|[0-9]\\(|\\)[0-9]").matcher(strRet);
 
         //Incluir multiplicacion al lado de parentesis izq
-        while (matcherLP.find()) {
+        while (matcherMP.find()) {
             var sb = new StringBuilder(strRet);
-            int ind1 = matcherLP.start(), ind2 = matcherLP.end();
-            sb.insert(ind2 - 1, "*");
+            int ind1 = matcherMP.start();
+            sb.insert(ind1 + 1, "*");
             strRet = sb.toString();
-            matcherLP.reset(strRet);
-        }
-        
-        while (matcherRP.find()) {
-            var sb = new StringBuilder(strRet);
-            int ind1 = matcherRP.start(), ind2 = matcherRP.end();
-            sb.insert(ind2 - 1, "*");
-            strRet = sb.toString();
-            matcherRP.reset(strRet);
+            matcherMP.reset(strRet);
         }
 
-        System.out.println(strRet);
-
+//        System.out.println(strRet);
         //Parsear operaciones
         while (matcherPar.find()) {
             var sb = new StringBuilder(strRet);
             int ind1 = matcherPar.start(), ind2 = matcherPar.end();
-            double nuevo = parsearOperacionCompuesta(strRet.substring(ind1 + 1, ind2 - 1));
+            String nuevo = parsearOperacionCompuesta(strRet.substring(ind1 + 1, ind2 - 1));
 
-            sb.replace(ind1, ind2, Double.toString(nuevo));
+            sb.replace(ind1, ind2, nuevo);
             strRet = sb.toString();
             matcherPar.reset(strRet);
         }
 
-        ret = parsearOperacionCompuesta(strRet);
+        strRet = parsearOperacionCompuesta(strRet);
+
+        try {
+            ret = Double.parseDouble(strRet);
+        } catch (NumberFormatException nfe) {
+            throw new MalFormatoOperacion("La operacion introducida(" + strRet + ") presenta un formato, o caracteres erroneos");
+        }
 
         return ret;
     }
@@ -127,39 +125,41 @@ public class Calculadora {
      * @return
      * @throws MalFormatoOperacion
      */
-    private static double parsearOperacionCompuesta(String operacion) throws MalFormatoOperacion {
-
-        if (!operacion.matches(STR_REG_OP_CUALQUIER)) {
-            throw new MalFormatoOperacion("El String '" + operacion + "' no tiene el formato esperado: " + STR_REG_OP_CUALQUIER);
-        }
-        double ret;
+    private static String parsearOperacionCompuesta(String operacion) {
+        String ret;
 
         String strRet = operacion;
-        strRet = cicloPatrones(PATRON_OP_POT, strRet);
-        strRet = cicloPatrones(PATRON_OP_MOD, strRet);
-        strRet = cicloPatrones(PATRON_OP_MULT, strRet);
-        strRet = cicloPatrones(PATRON_OP_DIV, strRet);
-        strRet = cicloPatrones(PATRON_OP_SUMA, strRet);
-        strRet = cicloPatrones(PATRON_OP_RESTA, strRet);
+        strRet = buscaPatron(PATRON_OP_POT, strRet);
+        strRet = buscaPatron(PATRON_OP_MOD, strRet);
+        strRet = buscaPatron(PATRON_OP_MULT, strRet);
+        strRet = buscaPatron(PATRON_OP_DIV, strRet);
+        strRet = buscaPatron(PATRON_OP_SUMA, strRet);
+        strRet = buscaPatron(PATRON_OP_RESTA, strRet);
 
-        ret = Double.parseDouble(strRet);
+        ret = strRet;
         return ret;
     }
 
-    private static String cicloPatrones(Pattern patron, String operacion) {
+    /**
+     * Recibe un patrón de una operacion de 2 digitos y una cadena de 
+     * una operacion de 2+ digitos, busca todas las coincidencias del patrón 
+     * en la cadena y las sustituye por su resultado.
+     *
+     * @param patron
+     * @param operacion
+     * @return
+     */
+    private static String buscaPatron(Pattern patron, String operacion) {
         var matcher = patron.matcher(operacion);
 
         while (matcher.find()) {
             var ind1 = matcher.start();
             var ind2 = matcher.end();
             var sb = new StringBuilder(operacion);
-            double nuevoVal = 0;
-            try {
-                nuevoVal = parsearCalculo(operacion.substring(ind1, ind2));
-            } catch (MalFormatoOperacion ex) {
-                Logger.getLogger(Calculadora.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            sb.replace(ind1, ind2, Double.toString(nuevoVal));
+            String nuevoVal;
+
+            nuevoVal = parsearCalculo(operacion.substring(ind1, ind2));
+            sb.replace(ind1, ind2, nuevoVal);
             operacion = sb.toString();
             matcher.reset(operacion);
         }
@@ -175,15 +175,10 @@ public class Calculadora {
      * @return El resultado de la operacion
      * @throws MalFormatoOperacion
      */
-    private static double parsearCalculo(String operacion) throws MalFormatoOperacion {
+    private static String parsearCalculo(String operacion) {
         double ret, op1, op2;
         String strOp = operacion, tipo;
         Matcher matcherNum, matcherTipo;
-
-        // Si el String no coincide lanza un error
-        if (!operacion.matches(STR_REG_OP_SIMPLE)) {
-            throw new MalFormatoOperacion("El String '" + operacion + "' no tiene el formato esperado: " + STR_REG_OP_SIMPLE);
-        }
 
         //Primer Operador
         matcherNum = PATRON_NUMERO.matcher(strOp);
@@ -217,13 +212,14 @@ public class Calculadora {
                 ret = op1 / op2;
                 break;
             case "^":
-                ret = Math.pow(Math.abs(op1), op2) * Math.signum(op1);
+                ret = Math.pow(Math.abs(op1), op2);
                 break;
             case "%":
                 ret = op1 % op2;
                 break;
         }
-        return ret;
+
+        return Double.toString(ret);
     }
 
 }
