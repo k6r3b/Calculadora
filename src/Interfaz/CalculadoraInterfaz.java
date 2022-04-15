@@ -6,8 +6,6 @@ package Interfaz;
 
 import clases.Calculadora;
 import exceptions.MalFormatoOperacion;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
