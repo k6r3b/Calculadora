@@ -46,7 +46,16 @@ public class TestPattern {
     public void testParentesis() {
         var patron = Calculadora.PATRON_PAR_SIMPLE;
         
-        var matcher = patron.matcher("(1.3+2*)");
-        matcher.matches();
+        var matcher = patron.matcher("(1.3+2)");
+        System.out.println(matcher.matches());
+    }
+    @Test
+    public void testNumero() {
+        var patron = Calculadora.PATRON_NUMERO;
+
+        var matcher = patron.matcher("*10.3");
+        System.out.println(matcher.matches());
     }
 }
+    
+
