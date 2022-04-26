@@ -10,8 +10,15 @@ package exceptions;
  */
 public class MalFormatoOperacion extends Exception {
 
-    public MalFormatoOperacion(String message) {
+    private final String operacion;
+    
+    public MalFormatoOperacion(String message, String operacion) {
         super(message);
+        this.operacion = operacion;
+    }
+
+    public String getOperacion() {
+        return operacion;
     }
     
 }

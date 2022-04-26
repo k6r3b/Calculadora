@@ -456,7 +456,8 @@ public class CalculadoraInterfaz extends javax.swing.JFrame {
         try {
             cuadroResultado.setText(Double.toString(Calculadora.resolverCalculo(cuadroOperacion.getText())));
         } catch (MalFormatoOperacion ex) {
-            cuadroResultado.setText("Expresión mal formada.");
+            cuadroResultado.setText("Error: " + ex.getMessage());
+            System.out.println(ex.getOperacion());
         }
     }//GEN-LAST:event_botonIgualActionPerformed
 

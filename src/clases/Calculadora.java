@@ -29,14 +29,16 @@ public class Calculadora {
             Logger.getLogger(Calculadora.class.getName()).log(Level.SEVERE, null, ex);
         }
     }*/
-
     // Patron para comprobar que sean numeros
     private static final String STR_REG_NUMERO = "(\\-?[0-9]+(\\.[0-9]+)?)";
     private static final Pattern PATRON_NUMERO = Pattern.compile(STR_REG_NUMERO);
 
     // Patron para buscar comprobar operaciones sin parentesis
-    private static final String STR_REG_SIGNO = "([+/\\-*^%√])";
-    private static final Pattern PATRON_SIGNO = Pattern.compile(STR_REG_SIGNO);
+    private static final String STR_REG_SIGNO_SIMPLE = "([√])";
+    private static final Pattern PATRON_SIGNO_SIMPLE = Pattern.compile(STR_REG_SIGNO_SIMPLE);
+
+    private static final String STR_REG_SIGNO_COMPUESTO = "([+/\\-*^%√])";
+    private static final Pattern PATRON_SIGNO_COMPUESTO = Pattern.compile(STR_REG_SIGNO_COMPUESTO);
 
     // Patron de operacion basica de 2 operandos
     private static final String STR_REG_OP_SUMA = "(" + STR_REG_NUMERO + "\\+" + STR_REG_NUMERO + ")";
@@ -57,13 +59,15 @@ public class Calculadora {
     private static final String STR_REG_OP_MOD = "(" + STR_REG_NUMERO + "\\%" + STR_REG_NUMERO + ")";
     private static final Pattern PATRON_OP_MOD = Pattern.compile(STR_REG_OP_MOD);
 
-    private static final String STR_REG_OP_SQRT = "(\\√" + STR_REG_NUMERO + ")";
+    private static final String STR_REG_OP_SQRT = "(√" + STR_REG_NUMERO + ")";
     private static final Pattern PATRON_OP_SQRT = Pattern.compile(STR_REG_OP_SQRT);
 
-    private static final String STR_REG_OP_SIMPLE = "(" + STR_REG_NUMERO + STR_REG_SIGNO + STR_REG_NUMERO + "|" + STR_REG_OP_SQRT + ")";
+    private static final String STR_REG_OP_SIMPLE_SING = "(" + STR_REG_SIGNO_SIMPLE + STR_REG_NUMERO + ")";
+    private static final String STR_REG_OP_SIMPLE_DOBLE = "(" + STR_REG_NUMERO + STR_REG_SIGNO_COMPUESTO + STR_REG_NUMERO + ")";
+    private static final String STR_REG_OP_SIMPLE = "(" + STR_REG_OP_SIMPLE_DOBLE + "|" + STR_REG_OP_SIMPLE_SING + ")";
 
     // Patron de operacion basica de 3+ operandos
-    private static final String STR_REG_OP_MULTIPLE = "(" + STR_REG_OP_SIMPLE + "(" + STR_REG_SIGNO + STR_REG_NUMERO + ")+)";
+    private static final String STR_REG_OP_MULTIPLE = "(" + STR_REG_OP_SIMPLE + "(" + STR_REG_SIGNO_COMPUESTO + STR_REG_SIGNO_SIMPLE + "*" + STR_REG_NUMERO + ")+)";
 
     // Patron dque confirma una operacion de 2+ operandos
     private static final String STR_REG_OP_CUALQUIER = "(" + STR_REG_OP_SIMPLE + "|" + STR_REG_OP_MULTIPLE + ")";
@@ -84,43 +88,57 @@ public class Calculadora {
         double ret = 0;
         String strRet = operacion;
         Matcher matcherPar;
-        Matcher matcherMP = Pattern.compile(STR_REG_NUMERO + "\\)\\(|[0-9]\\(|\\)[0-9]|[0-9]\\√").matcher(strRet);
-
-        //Incluir multiplicacion al lado de parentesis
-        while (matcherMP.find()) {
-            var sb = new StringBuilder(strRet);
-            int ind1 = matcherMP.start();
-            sb.insert(ind1 + 1, "*");
-            strRet = sb.toString();
-            matcherMP.reset(strRet);
-        }
-
-        strRet = quitarNumParentesis(strRet);
-        matcherPar = PATRON_PAR_SIMPLE.matcher(strRet);
-
-        //Parsear operaciones
-        while (matcherPar.find()) {
-            int ind1 = matcherPar.start(),
-                    ind2 = matcherPar.end();
-            String nuevo = resolverOperacion(strRet.substring(ind1 + 1, ind2 - 1));
-            StringBuilder sb = new StringBuilder(strRet);
-
-            strRet = quitarNumParentesis(sb.replace(ind1, ind2, nuevo).toString());
-
-            matcherPar.reset(strRet);
-        }
-
-        strRet = resolverOperacion(strRet);
+        Matcher matcherMP = Pattern.compile(
+                STR_REG_NUMERO
+                + "\\)\\("
+                + "|[0-9]\\("
+                + "|\\)[0-9]"
+                + "|[0-9]√"
+                + "|\\)√"
+        ).matcher(strRet);
 
         try {
+            //Incluir multiplicacion al lado de parentesis
+            while (matcherMP.find()) {
+                var sb = new StringBuilder(strRet);
+                int ind1 = matcherMP.start();
+                sb.insert(ind1 + 1, "*");
+                strRet = sb.toString();
+                matcherMP.reset(strRet);
+            }
+
+            strRet = quitarNumParentesis(strRet);
+            matcherPar = PATRON_PAR_SIMPLE.matcher(strRet);
+
+            //Parsear operaciones
+            while (matcherPar.find()) {
+                int ind1 = matcherPar.start(),
+                        ind2 = matcherPar.end();
+                String nuevo = resolverOperacion(strRet.substring(ind1 + 1, ind2 - 1));
+                StringBuilder sb = new StringBuilder(strRet);
+
+                strRet = quitarNumParentesis(sb.replace(ind1, ind2, nuevo).toString());
+
+                matcherPar.reset(strRet);
+            }
+
+            strRet = resolverOperacion(strRet);
+
             ret = Double.parseDouble(strRet);
         } catch (NumberFormatException nfe) {
-            throw new MalFormatoOperacion("La operacion introducida(" + strRet + ") presenta un formato, o caracteres erroneos");
+            throw new MalFormatoOperacion("Formato erroneo", strRet);
+        } catch (MalFormatoOperacion mfo) {
+            throw mfo;
         }
 
         return ret;
     }
-
+    
+    /**
+     * Quita los parentesis que rodean a un único número.
+     * @param texto
+     * @return Operacion sin paréntesis
+     */
     private static String quitarNumParentesis(String texto) {
         String ret = texto;
         Matcher matcher = Pattern.compile("\\(" + STR_REG_NUMERO + "\\)").matcher(ret);
@@ -144,7 +162,7 @@ public class Calculadora {
      * @return
      * @throws MalFormatoOperacion
      */
-    private static String resolverOperacion(String operacion) {
+    private static String resolverOperacion(String operacion) throws MalFormatoOperacion {
         String ret;
 
         String strRet = operacion;
@@ -169,7 +187,7 @@ public class Calculadora {
      * @param operacion La operacion en la que buscar el patrón.
      * @return
      */
-    private static String buscaPatron(Pattern patron, String operacion) {
+    private static String buscaPatron(Pattern patron, String operacion) throws MalFormatoOperacion {
         var matcher = patron.matcher(operacion);
 
         while (matcher.find()) {
@@ -192,7 +210,7 @@ public class Calculadora {
      * @return El resultado de la operacion
      * @throws MalFormatoOperacion
      */
-    private static String resolverBasico(String operacion) {
+    private static String resolverBasico(String operacion) throws MalFormatoOperacion {
         double ret, op1 = 0, op2 = 0;
         String strOp = operacion, tipo = "";
         Matcher matcherNum, matcherTipo;
@@ -205,10 +223,10 @@ public class Calculadora {
         }
 
         //Signo
-        matcherTipo = PATRON_SIGNO.matcher(strOp);
+        matcherTipo = PATRON_SIGNO_COMPUESTO.matcher(strOp);
         if (matcherTipo.find()) {
             tipo = strOp.substring(matcherTipo.start(), matcherTipo.end());
-            strOp = strOp.replaceFirst(STR_REG_SIGNO, "");
+            strOp = strOp.replaceFirst(STR_REG_SIGNO_COMPUESTO, "");
         }
 
         //Segundo Operador
@@ -238,6 +256,9 @@ public class Calculadora {
                 ret = op1 % op2;
                 break;
             case "√":
+                if (op1<=0) {
+                    throw new MalFormatoOperacion("Intento de raiz a un número negativo", strOp);
+                }
                 ret = Math.sqrt(op1);
                 break;
         }
