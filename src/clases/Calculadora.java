@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  */
 public class Calculadora {
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         try {
             System.out.println(parsearString("3"));
             System.out.println(parsearString("((3))"));
@@ -30,7 +30,7 @@ public class Calculadora {
         } catch (MalFormatoOperacion ex) {
             Logger.getLogger(Calculadora.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }*/
 
     // Patron para comprobar que sean numeros
     private static final String STR_REG_NUMERO = "(\\-?[0-9]+(\\.[0-9]+)?)";
