@@ -5,8 +5,6 @@
 package clases;
 
 import exceptions.MalFormatoOperacion;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,76 +14,57 @@ import java.util.regex.Pattern;
  */
 public class Calculadora {
 
-    public static void main(String[] args) {
-        try {
-            System.out.println(parsearString("3"));
-            System.out.println(parsearString("((3))"));
-            System.out.println(parsearString("3*10"));
-            System.out.println(parsearString("3+10"));
-            System.out.println(parsearString("3-10"));
-            System.out.println(parsearString("((3.1*10)3)/2"));
-            System.out.println(parsearString("3.1/10"));
-            System.out.println(parsearString("-3^3"));
-            System.out.println(parsearString("10%3"));
-        } catch (MalFormatoOperacion ex) {
-            Logger.getLogger(Calculadora.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
     // Patron para comprobar que sean numeros
     private static final String STR_REG_NUMERO = "(\\-?[0-9]+(\\.[0-9]+)?)";
-    public static final Pattern PATRON_NUMERO = Pattern.compile(STR_REG_NUMERO);
+    private static final Pattern PATRON_NUMERO = Pattern.compile(STR_REG_NUMERO);
 
     // Patron para buscar comprobar operaciones sin parentesis
     private static final String STR_REG_SIGNO = "([+/\\-*^%√])";
-    public static final Pattern PATRON_SIGNO = Pattern.compile(STR_REG_SIGNO);
+    private static final Pattern PATRON_SIGNO = Pattern.compile(STR_REG_SIGNO);
 
     // Patron de operacion basica de 2 operandos
     private static final String STR_REG_OP_SUMA = "(" + STR_REG_NUMERO + "\\+" + STR_REG_NUMERO + ")";
-    public static final Pattern PATRON_OP_SUMA = Pattern.compile(STR_REG_OP_SUMA);
+    private static final Pattern PATRON_OP_SUMA = Pattern.compile(STR_REG_OP_SUMA);
 
     private static final String STR_REG_OP_RESTA = "(" + STR_REG_NUMERO + "\\-" + STR_REG_NUMERO + ")";
-    public static final Pattern PATRON_OP_RESTA = Pattern.compile(STR_REG_OP_RESTA);
+    private static final Pattern PATRON_OP_RESTA = Pattern.compile(STR_REG_OP_RESTA);
 
     private static final String STR_REG_OP_MULT = "(" + STR_REG_NUMERO + "\\*" + STR_REG_NUMERO + ")";
-    public static final Pattern PATRON_OP_MULT = Pattern.compile(STR_REG_OP_MULT);
+    private static final Pattern PATRON_OP_MULT = Pattern.compile(STR_REG_OP_MULT);
 
     private static final String STR_REG_OP_DIV = "(" + STR_REG_NUMERO + "\\/" + STR_REG_NUMERO + ")";
-    public static final Pattern PATRON_OP_DIV = Pattern.compile(STR_REG_OP_DIV);
+    private static final Pattern PATRON_OP_DIV = Pattern.compile(STR_REG_OP_DIV);
 
     private static final String STR_REG_OP_POT = "(" + STR_REG_NUMERO + "\\^" + STR_REG_NUMERO + ")";
-    public static final Pattern PATRON_OP_POT = Pattern.compile(STR_REG_OP_POT);
+    private static final Pattern PATRON_OP_POT = Pattern.compile(STR_REG_OP_POT);
 
     private static final String STR_REG_OP_MOD = "(" + STR_REG_NUMERO + "\\%" + STR_REG_NUMERO + ")";
-    public static final Pattern PATRON_OP_MOD = Pattern.compile(STR_REG_OP_MOD);
+    private static final Pattern PATRON_OP_MOD = Pattern.compile(STR_REG_OP_MOD);
 
     private static final String STR_REG_OP_SQRT = "(\\√" + STR_REG_NUMERO + ")";
-    public static final Pattern PATRON_OP_SQRT = Pattern.compile(STR_REG_OP_SQRT);
+    private static final Pattern PATRON_OP_SQRT = Pattern.compile(STR_REG_OP_SQRT);
 
     private static final String STR_REG_OP_SIMPLE = "(" + STR_REG_NUMERO + STR_REG_SIGNO + STR_REG_NUMERO + "|" + STR_REG_OP_SQRT + ")";
-    public static final Pattern PATRON_OP_SIMPLE = Pattern.compile(STR_REG_OP_SIMPLE);
-    
+
     // Patron de operacion basica de 3+ operandos
     private static final String STR_REG_OP_MULTIPLE = "(" + STR_REG_OP_SIMPLE + "(" + STR_REG_SIGNO + STR_REG_NUMERO + ")+)";
-    public static final Pattern PATRON_OP_MULTIPLE = Pattern.compile(STR_REG_OP_MULTIPLE);
 
     // Patron dque confirma una operacion de 2+ operandos
     private static final String STR_REG_OP_CUALQUIER = "(" + STR_REG_OP_SIMPLE + "|" + STR_REG_OP_MULTIPLE + ")";
-    public static final Pattern PATRON_OP_CUALQUIER = Pattern.compile(STR_REG_OP_CUALQUIER);
 
     // Patron para buscar multiples operaciones dentro de parentesis
     private static final String STR_REG_PAR_SIMPLE = "(\\(" + STR_REG_OP_CUALQUIER + "\\))";
-    public static final Pattern PATRON_PAR_SIMPLE = Pattern.compile(STR_REG_PAR_SIMPLE);
+    private static final Pattern PATRON_PAR_SIMPLE = Pattern.compile(STR_REG_PAR_SIMPLE);
 
     /**
-     * Analiza la operacion introducida, dividiendola en operaciones mas
-     * sencillas y resolviendolas con el metodo parsearCalculo()
+     * Resuelve la operacion introducida como texto y la devuelve como número
+     * entero.
      *
-     * @param operacion
-     * @return
-     * @throws exceptions.MalFormatoOperacion
+     * @param operacion La operacion a resolver
+     * @return Resultado de la operación
+     * @throws exceptions.MalFormatoOperacion Si la operacion tiene errores.
      */
-    public static double parsearString(String operacion) throws MalFormatoOperacion {
+    public static double resolverCalculo(String operacion) throws MalFormatoOperacion {
         double ret = 0;
         String strRet = operacion;
         Matcher matcherPar;
@@ -102,23 +81,20 @@ public class Calculadora {
 
         strRet = quitarNumParentesis(strRet);
         matcherPar = PATRON_PAR_SIMPLE.matcher(strRet);
-        
+
         //Parsear operaciones
         while (matcherPar.find()) {
-            StringBuilder sb;
-            int ind1 = matcherPar.start(), ind2 = matcherPar.end();
-            String nuevo = parsearOperacionCompuesta(strRet.substring(ind1 + 1, ind2 - 1));
-            
-            sb = new StringBuilder(strRet);
-            sb.replace(ind1, ind2, nuevo);
-            
-            strRet = sb.toString();
-            strRet = quitarNumParentesis(strRet);
-            
+            int ind1 = matcherPar.start(),
+                    ind2 = matcherPar.end();
+            String nuevo = resolverOperacion(strRet.substring(ind1 + 1, ind2 - 1));
+            StringBuilder sb = new StringBuilder(strRet);
+
+            strRet = quitarNumParentesis(sb.replace(ind1, ind2, nuevo).toString());
+
             matcherPar.reset(strRet);
         }
 
-        strRet = parsearOperacionCompuesta(strRet);
+        strRet = resolverOperacion(strRet);
 
         try {
             ret = Double.parseDouble(strRet);
@@ -152,7 +128,7 @@ public class Calculadora {
      * @return
      * @throws MalFormatoOperacion
      */
-    private static String parsearOperacionCompuesta(String operacion) {
+    private static String resolverOperacion(String operacion) {
         String ret;
 
         String strRet = operacion;
@@ -173,8 +149,8 @@ public class Calculadora {
      * operacion de 2+ digitos, busca todas las coincidencias del patrón en la
      * cadena y las sustituye por su resultado.
      *
-     * @param patron
-     * @param operacion
+     * @param patron El patrón de operación a buscar
+     * @param operacion La operacion en la que buscar el patrón.
      * @return
      */
     private static String buscaPatron(Pattern patron, String operacion) {
@@ -184,10 +160,7 @@ public class Calculadora {
             var ind1 = matcher.start();
             var ind2 = matcher.end();
             var sb = new StringBuilder(operacion);
-            String nuevoVal;
-
-            nuevoVal = parsearCalculo(operacion.substring(ind1, ind2));
-            sb.replace(ind1, ind2, nuevoVal);
+            sb.replace(ind1, ind2, resolverBasico(operacion.substring(ind1, ind2))).toString();
             operacion = sb.toString();
             matcher.reset(operacion);
         }
@@ -203,7 +176,7 @@ public class Calculadora {
      * @return El resultado de la operacion
      * @throws MalFormatoOperacion
      */
-    private static String parsearCalculo(String operacion) {
+    private static String resolverBasico(String operacion) {
         double ret, op1 = 0, op2 = 0;
         String strOp = operacion, tipo = "";
         Matcher matcherNum, matcherTipo;
