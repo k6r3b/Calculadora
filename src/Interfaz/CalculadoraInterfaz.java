@@ -190,6 +190,7 @@ public class CalculadoraInterfaz extends javax.swing.JFrame {
         cuadroResultado.setEditable(false);
         cuadroResultado.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         cuadroResultado.setEnabled(false);
+        cuadroResultado.setRequestFocusEnabled(false);
         cuadroResultado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cuadroResultadoActionPerformed(evt);
@@ -300,7 +301,7 @@ public class CalculadoraInterfaz extends javax.swing.JFrame {
                 .addGap(20, 20, 20)
                 .addComponent(cuadroOperacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cuadroResultado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cuadroResultado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -361,7 +362,7 @@ public class CalculadoraInterfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_cuadroOperacionActionPerformed
 
     private void boton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton7ActionPerformed
-        ponerSimbolo("7");
+        cuadroOperacion.setText(cuadroOperacion.getText() + "7");
     }//GEN-LAST:event_boton7ActionPerformed
 
     private void botonRetrocesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRetrocesoActionPerformed
@@ -370,59 +371,59 @@ public class CalculadoraInterfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_botonRetrocesoActionPerformed
 
     private void boton0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton0ActionPerformed
-        ponerSimbolo("0");
+        cuadroOperacion.setText(cuadroOperacion.getText() + "0");
     }//GEN-LAST:event_boton0ActionPerformed
 
     private void botonPuntoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPuntoActionPerformed
-        ponerSimbolo(".");
+        cuadroOperacion.setText(cuadroOperacion.getText() + ".");
     }//GEN-LAST:event_botonPuntoActionPerformed
 
     private void boton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton2ActionPerformed
-        ponerSimbolo("2");
+        cuadroOperacion.setText(cuadroOperacion.getText() + "2");
     }//GEN-LAST:event_boton2ActionPerformed
 
     private void boton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton1ActionPerformed
-        ponerSimbolo("1");
+        cuadroOperacion.setText(cuadroOperacion.getText() + "1");
     }//GEN-LAST:event_boton1ActionPerformed
 
     private void boton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton3ActionPerformed
-        ponerSimbolo("3");
+        cuadroOperacion.setText(cuadroOperacion.getText() + "3");
     }//GEN-LAST:event_boton3ActionPerformed
 
     private void boton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton4ActionPerformed
-        ponerSimbolo("4");
+        cuadroOperacion.setText(cuadroOperacion.getText() + "4");
     }//GEN-LAST:event_boton4ActionPerformed
 
     private void boton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton5ActionPerformed
-        ponerSimbolo("5");
+        cuadroOperacion.setText(cuadroOperacion.getText() + "5");
     }//GEN-LAST:event_boton5ActionPerformed
 
     private void boton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton6ActionPerformed
-        ponerSimbolo("6");
+        cuadroOperacion.setText(cuadroOperacion.getText() + "6");
     }//GEN-LAST:event_boton6ActionPerformed
 
     private void boton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton8ActionPerformed
-        ponerSimbolo("8");
+        cuadroOperacion.setText(cuadroOperacion.getText() + "8");
     }//GEN-LAST:event_boton8ActionPerformed
 
     private void botonMasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMasActionPerformed
-        ponerSimbolo("+");
+        cuadroOperacion.setText(cuadroOperacion.getText() + "+");
     }//GEN-LAST:event_botonMasActionPerformed
 
     private void botonPorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPorActionPerformed
-        ponerSimbolo("*");
+        cuadroOperacion.setText(cuadroOperacion.getText() + "*");
     }//GEN-LAST:event_botonPorActionPerformed
 
     private void botonRestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRestoActionPerformed
-        ponerSimbolo("%");
+        cuadroOperacion.setText(cuadroOperacion.getText() + "%");
     }//GEN-LAST:event_botonRestoActionPerformed
 
     private void boton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton9ActionPerformed
-        ponerSimbolo("9");
+        cuadroOperacion.setText(cuadroOperacion.getText() + "9");
     }//GEN-LAST:event_boton9ActionPerformed
 
     private void botonRaizCuadradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRaizCuadradaActionPerformed
-        ponerSimbolo("√");
+        cuadroOperacion.setText(cuadroOperacion.getText() + "√");
     }//GEN-LAST:event_botonRaizCuadradaActionPerformed
 
     private void cuadroResultadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuadroResultadoActionPerformed
@@ -430,7 +431,7 @@ public class CalculadoraInterfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_cuadroResultadoActionPerformed
 
     private void botonElevarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonElevarActionPerformed
-        ponerSimbolo("^");
+        cuadroOperacion.setText(cuadroOperacion.getText() + "^");
     }//GEN-LAST:event_botonElevarActionPerformed
 
     private void botonBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBorrarActionPerformed
@@ -438,19 +439,19 @@ public class CalculadoraInterfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_botonBorrarActionPerformed
 
     private void botonEntreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEntreActionPerformed
-        ponerSimbolo("/");
+        cuadroOperacion.setText(cuadroOperacion.getText() + "/");
     }//GEN-LAST:event_botonEntreActionPerformed
 
     private void botonMenosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMenosActionPerformed
-        ponerSimbolo("-");
+        cuadroOperacion.setText(cuadroOperacion.getText() + "-");
     }//GEN-LAST:event_botonMenosActionPerformed
 
     private void botonParDerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonParDerActionPerformed
-        ponerSimbolo(")");
+        cuadroOperacion.setText(cuadroOperacion.getText() + ")");
     }//GEN-LAST:event_botonParDerActionPerformed
 
     private void botonParIzqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonParIzqActionPerformed
-        ponerSimbolo("(");
+        cuadroOperacion.setText(cuadroOperacion.getText() + "(");
     }//GEN-LAST:event_botonParIzqActionPerformed
 
     private void botonIgualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonIgualActionPerformed
@@ -496,9 +497,6 @@ public class CalculadoraInterfaz extends javax.swing.JFrame {
         });
     }
 
-    private void ponerSimbolo(String simbolo) {
-        cuadroOperacion.setText(cuadroOperacion.getText() + simbolo);
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton boton0;

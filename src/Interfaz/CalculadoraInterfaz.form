@@ -97,7 +97,7 @@
               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
               <Component id="cuadroOperacion" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="cuadroResultado" min="-2" max="-2" attributes="0"/>
+              <Component id="cuadroResultado" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
@@ -319,6 +319,7 @@
         <Property name="editable" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="11"/>
         <Property name="enabled" type="boolean" value="false"/>
+        <Property name="requestFocusEnabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cuadroResultadoActionPerformed"/>
