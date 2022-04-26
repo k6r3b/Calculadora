@@ -6,8 +6,6 @@ package Interfaz;
 
 import clases.Calculadora;
 import exceptions.MalFormatoOperacion;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -456,7 +454,7 @@ public class CalculadoraInterfaz extends javax.swing.JFrame {
 
     private void botonIgualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonIgualActionPerformed
         try {
-            cuadroResultado.setText(Double.toString(Calculadora.parsearString(cuadroOperacion.getText())));
+            cuadroResultado.setText(Double.toString(Calculadora.resolverCalculo(cuadroOperacion.getText())));
         } catch (MalFormatoOperacion ex) {
             cuadroResultado.setText("Expresión mal formada.");
         }
