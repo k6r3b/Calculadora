@@ -76,6 +76,114 @@ public class Calculadora {
     private static final String STR_REG_PAR_SIMPLE = "(\\(" + STR_REG_OP_CUALQUIER + "\\))";
     private static final Pattern PATRON_PAR_SIMPLE = Pattern.compile(STR_REG_PAR_SIMPLE);
 
+    public static String getSTR_REG_NUMERO() {
+        return STR_REG_NUMERO;
+    }
+
+    public static Pattern getPATRON_NUMERO() {
+        return PATRON_NUMERO;
+    }
+
+    public static String getSTR_REG_SIGNO_SIMPLE() {
+        return STR_REG_SIGNO_SIMPLE;
+    }
+
+    public static Pattern getPATRON_SIGNO_SIMPLE() {
+        return PATRON_SIGNO_SIMPLE;
+    }
+
+    public static String getSTR_REG_SIGNO_COMPUESTO() {
+        return STR_REG_SIGNO_COMPUESTO;
+    }
+
+    public static Pattern getPATRON_SIGNO_COMPUESTO() {
+        return PATRON_SIGNO_COMPUESTO;
+    }
+
+    public static String getSTR_REG_OP_SUMA() {
+        return STR_REG_OP_SUMA;
+    }
+
+    public static Pattern getPATRON_OP_SUMA() {
+        return PATRON_OP_SUMA;
+    }
+
+    public static String getSTR_REG_OP_RESTA() {
+        return STR_REG_OP_RESTA;
+    }
+
+    public static Pattern getPATRON_OP_RESTA() {
+        return PATRON_OP_RESTA;
+    }
+
+    public static String getSTR_REG_OP_MULT() {
+        return STR_REG_OP_MULT;
+    }
+
+    public static Pattern getPATRON_OP_MULT() {
+        return PATRON_OP_MULT;
+    }
+
+    public static String getSTR_REG_OP_DIV() {
+        return STR_REG_OP_DIV;
+    }
+
+    public static Pattern getPATRON_OP_DIV() {
+        return PATRON_OP_DIV;
+    }
+
+    public static String getSTR_REG_OP_POT() {
+        return STR_REG_OP_POT;
+    }
+
+    public static Pattern getPATRON_OP_POT() {
+        return PATRON_OP_POT;
+    }
+
+    public static String getSTR_REG_OP_MOD() {
+        return STR_REG_OP_MOD;
+    }
+
+    public static Pattern getPATRON_OP_MOD() {
+        return PATRON_OP_MOD;
+    }
+
+    public static String getSTR_REG_OP_SQRT() {
+        return STR_REG_OP_SQRT;
+    }
+
+    public static Pattern getPATRON_OP_SQRT() {
+        return PATRON_OP_SQRT;
+    }
+
+    public static String getSTR_REG_OP_SIMPLE_SING() {
+        return STR_REG_OP_SIMPLE_SING;
+    }
+
+    public static String getSTR_REG_OP_SIMPLE_DOBLE() {
+        return STR_REG_OP_SIMPLE_DOBLE;
+    }
+
+    public static String getSTR_REG_OP_SIMPLE() {
+        return STR_REG_OP_SIMPLE;
+    }
+
+    public static String getSTR_REG_OP_MULTIPLE() {
+        return STR_REG_OP_MULTIPLE;
+    }
+
+    public static String getSTR_REG_OP_CUALQUIER() {
+        return STR_REG_OP_CUALQUIER;
+    }
+
+    public static String getSTR_REG_PAR_SIMPLE() {
+        return STR_REG_PAR_SIMPLE;
+    }
+
+    public static Pattern getPATRON_PAR_SIMPLE() {
+        return PATRON_PAR_SIMPLE;
+    }
+    
     /**
      * Resuelve la operacion introducida como texto y la devuelve como número
      * entero.
@@ -112,25 +220,24 @@ public class Calculadora {
 
             //Parsear operaciones
             while (matcherPar.find()) {
-                int ind1 = matcherPar.start(),
-                        ind2 = matcherPar.end();
-                String nuevo = resolverOperacion(strRet.substring(ind1 + 1, ind2 - 1));
+                int ind1 = matcherPar.start(), ind2 = matcherPar.end();
                 StringBuilder sb = new StringBuilder(strRet);
+                String nuevo = new Operacion(strRet.substring(ind1 + 1, ind2 - 1)).getResultado().toString();
 
                 strRet = quitarNumParentesis(sb.replace(ind1, ind2, nuevo).toString());
 
                 matcherPar.reset(strRet);
             }
 
-            strRet = resolverOperacion(strRet);
+            strRet = new Operacion(strRet).getResultado().toString();
 
             ret = Double.parseDouble(strRet);
         } catch (NumberFormatException nfe) {
-            throw new MalFormatoOperacion("Formato erroneo", strRet);
+            throw new MalFormatoOperacion("Formato erróneo", strRet);
         } catch (MalFormatoOperacion mfo) {
             throw mfo;
         }
-
+        
         return ret;
     }
     
@@ -154,116 +261,5 @@ public class Calculadora {
 
         return ret;
     }
-
-    /**
-     * Parsea operaciones de 3+ operandos y devuelve el resultado
-     *
-     * @param operacion
-     * @return
-     * @throws MalFormatoOperacion
-     */
-    private static String resolverOperacion(String operacion) throws MalFormatoOperacion {
-        String ret;
-
-        String strRet = operacion;
-        strRet = buscaPatron(PATRON_OP_SQRT, strRet);
-        strRet = buscaPatron(PATRON_OP_POT, strRet);
-        strRet = buscaPatron(PATRON_OP_MOD, strRet);
-        strRet = buscaPatron(PATRON_OP_MULT, strRet);
-        strRet = buscaPatron(PATRON_OP_DIV, strRet);
-        strRet = buscaPatron(PATRON_OP_SUMA, strRet);
-        strRet = buscaPatron(PATRON_OP_RESTA, strRet);
-
-        ret = strRet;
-        return ret;
-    }
-
-    /**
-     * Recibe un patrón de una operacion de 2 digitos y una cadena de una
-     * operacion de 2+ digitos, busca todas las coincidencias del patrón en la
-     * cadena y las sustituye por su resultado.
-     *
-     * @param patron El patrón de operación a buscar
-     * @param operacion La operacion en la que buscar el patrón.
-     * @return
-     */
-    private static String buscaPatron(Pattern patron, String operacion) throws MalFormatoOperacion {
-        var matcher = patron.matcher(operacion);
-
-        while (matcher.find()) {
-            var ind1 = matcher.start();
-            var ind2 = matcher.end();
-            var sb = new StringBuilder(operacion);
-            sb.replace(ind1, ind2, resolverBasico(operacion.substring(ind1, ind2))).toString();
-            operacion = sb.toString();
-            matcher.reset(operacion);
-        }
-
-        return operacion;
-    }
-
-    /**
-     * Comprueba el formato de una operacion basica de 2 operandos y devuelve el
-     * resultado de dicha operacion
-     *
-     * @param operacion String que contiene la operacion a ejecutar
-     * @return El resultado de la operacion
-     * @throws MalFormatoOperacion
-     */
-    private static String resolverBasico(String operacion) throws MalFormatoOperacion {
-        double ret, op1 = 0, op2 = 0;
-        String strOp = operacion, tipo = "";
-        Matcher matcherNum, matcherTipo;
-
-        //Primer Operador
-        matcherNum = PATRON_NUMERO.matcher(strOp);
-        if (matcherNum.find()) {
-            op1 = Double.parseDouble(strOp.substring(matcherNum.start(), matcherNum.end()));
-            strOp = strOp.replaceFirst(STR_REG_NUMERO, "");
-        }
-
-        //Signo
-        matcherTipo = PATRON_SIGNO_COMPUESTO.matcher(strOp);
-        if (matcherTipo.find()) {
-            tipo = strOp.substring(matcherTipo.start(), matcherTipo.end());
-            strOp = strOp.replaceFirst(STR_REG_SIGNO_COMPUESTO, "");
-        }
-
-        //Segundo Operador
-        matcherNum.reset(strOp);
-        if (matcherNum.find()) {
-            op2 = Double.parseDouble(strOp.substring(matcherNum.start(), matcherNum.end()));
-        }
-
-        switch (tipo) {
-            default:
-            case "+":
-                ret = op1 + op2;
-                break;
-            case "-":
-                ret = op1 - op2;
-                break;
-            case "*":
-                ret = op1 * op2;
-                break;
-            case "/":
-                ret = op1 / op2;
-                break;
-            case "^":
-                ret = Math.pow(Math.abs(op1), op2);
-                break;
-            case "%":
-                ret = op1 % op2;
-                break;
-            case "√":
-                if (op1<=0) {
-                    throw new MalFormatoOperacion("Intento de raiz a un número negativo", strOp);
-                }
-                ret = Math.sqrt(op1);
-                break;
-        }
-
-        return Double.toString(ret);
-    }
-
+    
 }
