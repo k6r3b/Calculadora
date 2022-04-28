@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
  */
 public class Operacion {
     
+    private final String operacion;
     private final Resultado resultado;
 
     private static final Pattern PATRON_OP_SUMA = Calculadora.getPATRON_OP_SUMA();
@@ -25,7 +26,8 @@ public class Operacion {
     private static final Pattern PATRON_OP_MOD = Calculadora.getPATRON_OP_MOD();
     
     public Operacion(String operacion) throws MalFormatoOperacion {
-        this.resultado = new Resultado(resolverOperacion(operacion));
+        this.operacion = operacion;
+        this.resultado = resolverOperacion(this.operacion);
     }
 
     public Resultado getResultado() {
@@ -39,17 +41,17 @@ public class Operacion {
      * @return
      * @throws MalFormatoOperacion
      */
-    private double resolverOperacion(String operacion) throws MalFormatoOperacion {
+    private Resultado resolverOperacion(String operacion) throws MalFormatoOperacion {
         String strRet = operacion;
-        strRet = buscaPatron(PATRON_OP_SQRT, strRet);
-        strRet = buscaPatron(PATRON_OP_POT, strRet);
-        strRet = buscaPatron(PATRON_OP_MOD, strRet);
-        strRet = buscaPatron(PATRON_OP_MULT, strRet);
-        strRet = buscaPatron(PATRON_OP_DIV, strRet);
-        strRet = buscaPatron(PATRON_OP_SUMA, strRet);
-        strRet = buscaPatron(PATRON_OP_RESTA, strRet);
+        strRet = buscarOperacion(PATRON_OP_SQRT, strRet);
+        strRet = buscarOperacion(PATRON_OP_POT, strRet);
+        strRet = buscarOperacion(PATRON_OP_MOD, strRet);
+        strRet = buscarOperacion(PATRON_OP_MULT, strRet);
+        strRet = buscarOperacion(PATRON_OP_DIV, strRet);
+        strRet = buscarOperacion(PATRON_OP_SUMA, strRet);
+        strRet = buscarOperacion(PATRON_OP_RESTA, strRet);
 
-        return Double.parseDouble(strRet);
+        return new Resultado(Double.parseDouble(strRet));
     }
 
     /**
@@ -61,7 +63,7 @@ public class Operacion {
      * @param operacion La operacion en la que buscar el patrón.
      * @return
      */
-    private String buscaPatron(Pattern patron, String operacion) throws MalFormatoOperacion {
+    private String buscarOperacion(Pattern patron, String operacion) throws MalFormatoOperacion {
         var matcher = patron.matcher(operacion);
 
         while (matcher.find()) {

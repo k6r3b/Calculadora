@@ -16,15 +16,15 @@ public class Calculadora {
 
     /*public static void main(String[] args) {
         try {
-            System.out.println(parsearString("3"));
-            System.out.println(parsearString("((3))"));
-            System.out.println(parsearString("3*10"));
-            System.out.println(parsearString("3+10"));
-            System.out.println(parsearString("3-10"));
-            System.out.println(parsearString("((3.1*10)3)/2"));
-            System.out.println(parsearString("3.1/10"));
-            System.out.println(parsearString("-3^3"));
-            System.out.println(parsearString("10%3"));
+            System.out.println(resolverCalculo("3"));
+            System.out.println(resolverCalculo("((3))"));
+            System.out.println(resolverCalculo("3*10"));
+            System.out.println(resolverCalculo("3+10"));
+            System.out.println(resolverCalculo("3-10"));
+            System.out.println(resolverCalculo("((3.1*10)3)/2"));
+            System.out.println(resolverCalculo("3.1/10"));
+            System.out.println(resolverCalculo("-3^3"));
+            System.out.println(resolverCalculo("10%3"));
         } catch (MalFormatoOperacion ex) {
             Logger.getLogger(Calculadora.class.getName()).log(Level.SEVERE, null, ex);
         }
