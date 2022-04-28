@@ -1,1 +1,0 @@
-typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"clases","l":"Calculadora"},{"p":"Interfaz","l":"CalculadoraInterfaz"},{"p":"clases","l":"EjemplosRegex"},{"p":"exceptions","l":"MalFormatoOperacion"},{"p":"clases","l":"Operacion"},{"p":"clases","l":"Resultado"}]

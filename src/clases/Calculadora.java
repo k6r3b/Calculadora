@@ -9,8 +9,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
+ * Realiza las operaciones complejas, que incluyen parentesis, creando Operaciones
  * @author carlos
+ * @see clases.Operacion
+ * @see exceptions.MalFormatoOperacion
  */
 public class Calculadora {
 
@@ -190,7 +192,7 @@ public class Calculadora {
      *
      * @param operacion La operacion a resolver
      * @return Resultado de la operación
-     * @throws exceptions.MalFormatoOperacion Si la operacion tiene errores.
+     * @throws exceptions.MalFormatoOperacion Devuelve el motivo del error.
      */
     public static double resolverCalculo(String operacion) throws MalFormatoOperacion {
         double ret = 0;

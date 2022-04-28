@@ -43,10 +43,10 @@ public class Operacion {
      */
     private Resultado resolverOperacion(String operacion) throws MalFormatoOperacion {
         String strRet = operacion;
-        strRet = buscarOperacion(PATRON_OP_SQRT, strRet);
         strRet = buscarOperacion(PATRON_OP_POT, strRet);
-        strRet = buscarOperacion(PATRON_OP_MOD, strRet);
+        strRet = buscarOperacion(PATRON_OP_SQRT, strRet);
         strRet = buscarOperacion(PATRON_OP_MULT, strRet);
+        strRet = buscarOperacion(PATRON_OP_MOD, strRet);
         strRet = buscarOperacion(PATRON_OP_DIV, strRet);
         strRet = buscarOperacion(PATRON_OP_SUMA, strRet);
         strRet = buscarOperacion(PATRON_OP_RESTA, strRet);
@@ -113,13 +113,13 @@ public class Operacion {
         }
 
         switch (tipo) {
-            default:
             case "+":
                 ret = op1 + op2;
                 break;
             case "-":
                 ret = op1 - op2;
                 break;
+            default:
             case "*":
                 ret = op1 * op2;
                 break;
